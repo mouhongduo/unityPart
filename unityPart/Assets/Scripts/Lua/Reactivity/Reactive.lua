@@ -53,7 +53,7 @@ function Reactive.ref(raw)
     return ret
 end
 
-function Reactive.computed(getter)
+function Reactive.computed(getter)--用ref来实现计算属性
     local ret = Ref:new()
 
     Effect.effect(function()
