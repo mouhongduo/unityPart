@@ -1,0 +1,9 @@
+{
+    "Lua.diagnostics.globals": [
+        "typeof",
+        "CS",
+        "start",
+        "update",
+        "ondestroy"
+    ]
+}
