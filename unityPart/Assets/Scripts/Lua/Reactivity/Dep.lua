@@ -2,13 +2,18 @@ local Effect = require("Reactivity\\Effect")
 local Dep = {}
 
 local targetMap = {} --weakTable
+local weakKeyMt = {
+    __mode = "k"
+}
+setmetatable(targetMap, weakKeyMt)
 
 function Dep.track(target, key)
     if(Effect.activeEffect ~= nil) then
-        print("Effect.activeEffect is" .. tostring(Effect.activeEffect))
+        print("Effect.activeEffect is" .. tostring(Effect.activeEffect) .. " and key is:" .. key)
         local depsMap = targetMap[target]
         if(depsMap == nil) then
             depsMap = {}--depsMap
+            setmetatable(depsMap, weakKeyMt)
             targetMap[target] = depsMap
         end
         local dep = depsMap[key]
@@ -18,7 +23,7 @@ function Dep.track(target, key)
         end
         dep.effect = Effect.activeEffect
     else
-        print("Effect.activeEffect is null")
+        print("Effect.activeEffect is null and key is:" .. key)
     end
 end
 
