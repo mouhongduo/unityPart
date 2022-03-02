@@ -1,4 +1,4 @@
-local Effect = require("Reactivity\\Effect")
+local Effect = require("DynamicBind\\Reactivity\\Effect")
 local Dep = {}
 
 local targetMap = {} --weakTable

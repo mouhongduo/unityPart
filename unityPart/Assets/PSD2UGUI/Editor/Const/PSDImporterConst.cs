@@ -1,5 +1,6 @@
 ﻿using UnityEditor;
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace PSDUIImporter
 {
@@ -38,12 +39,18 @@ namespace PSDUIImporter
 
         public const string FONT_SUFIX = ".ttf";
 
+        public const string PREFAB_SUFIX = ".prefab";
+
         /// <summary>
         /// 修改资源模板加载路径,不能放在resources目录
         /// </summary>
         public static string PSDUI_PATH = "Assets/PSD2UGUI/Template/UI/";
+        public static string UI_PREFAB_SAVE_PATH = "/Prefabs/UI/";//added
 
         public const string PSDUI_SUFFIX = ".prefab";
+
+        //public static Dictionary<string, string> = new Dictionary<string, string>({{""}});
+
 
         public static string ASSET_PATH_EMPTY = PSDUI_PATH + "Empty" + PSDUI_SUFFIX;
         public static string ASSET_PATH_BUTTON = PSDUI_PATH + "Button" + PSDUI_SUFFIX;
@@ -85,6 +92,7 @@ namespace PSDUIImporter
                 FONT_FOLDER = _config.m_fontPath;
                 FONT_STATIC_FOLDER = _config.m_staticFontPath;
                 PSDUI_PATH = _config.m_psduiTemplatePath;
+                UI_PREFAB_SAVE_PATH = _config.m_uiPrefabSavePath;
 
 				// 重生成路径
                 ASSET_PATH_EMPTY = PSDUI_PATH + "Empty" + PSDUI_SUFFIX;

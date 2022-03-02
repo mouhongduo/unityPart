@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class PSD2UGUISettingWizard : ScriptableWizard
 {
-    [MenuItem("QuickTool/PSD2UGUISettingWizard")]
+    [MenuItem("UITool/PSD2UGUISettingWizard")]
     private static void CreateWizard()
     {
         ScriptableWizard.DisplayWizard<PSD2UGUISettingWizard>("Create Light", "Create");

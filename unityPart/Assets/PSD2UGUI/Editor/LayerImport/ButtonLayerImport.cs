@@ -19,7 +19,31 @@ namespace PSDUIImporter
         public void DrawLayer(Layer layer, GameObject parent)
         {
             UnityEngine.UI.Button button = PSDImportUtility.LoadAndInstant<UnityEngine.UI.Button>(PSDImporterConst.ASSET_PATH_BUTTON, layer.name, parent);
-
+            string[] args = layer.arguments;
+            if(args != null)
+            {
+                foreach (string arg in args)
+                {
+                    string[] splited = arg.Split('=');
+                    string key = splited[0].ToLower();
+                    string value = splited[1];
+                    string type = "";
+                    if (key == "act")
+                    {
+                        type = "OnClick";
+                    }
+                    else if (key == "show")
+                    {
+                        type = "BindShow";
+                    }
+                    else
+                    {
+                        Debug.LogError("unvalid argument");
+                    }
+                    PSDImportUtility.bindItems.Add(new Base.BindItem(layer.name, value, type, button.gameObject));
+                }
+            }
+            
             if (layer.layers != null)
             {
                 for (int imageIndex = 0; imageIndex < layer.layers.Length; imageIndex++)

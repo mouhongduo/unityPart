@@ -17,9 +17,9 @@ namespace PSDUIImporter
 
         public void DrawLayer(Layer layer, GameObject parent)
         {
-            UnityEngine.UI.InputField temp = AssetDatabase.LoadAssetAtPath(PSDImporterConst.ASSET_PATH_INPUTFIELD, typeof(UnityEngine.UI.InputField)) as UnityEngine.UI.InputField;
-            UnityEngine.UI.InputField inputfield = GameObject.Instantiate(temp) as UnityEngine.UI.InputField;
-            inputfield.transform.SetParent(parent.transform, false);//.parent = parent.transform;
+            //UnityEngine.UI.InputField temp = AssetDatabase.LoadAssetAtPath(PSDImporterConst.ASSET_PATH_INPUTFIELD, typeof(UnityEngine.UI.InputField)) as UnityEngine.UI.InputField;
+            UnityEngine.UI.InputField inputfield = PSDImportUtility.LoadAndInstant<InputField>(PSDImporterConst.ASSET_PATH_INPUTFIELD, layer.name, parent);
+
             inputfield.name = layer.name;
 
             // 背景尺寸,用来限制文本框尺寸
@@ -37,7 +37,7 @@ namespace PSDUIImporter
 
                     if (image.imageType == ImageType.Label)
                     {
-                        if (image.name.ToLower().Contains("text"))
+                        if (image.name.ToLower().Contains("input"))
                         {
                             this.pSDImportCtrl.DrawLayer(_temp, inputfield.gameObject);
 

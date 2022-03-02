@@ -19,4 +19,7 @@ public class PSD2UGUIConfig : ScriptableObject
 
     [Header("资源模板加载路径")]
     public string m_psduiTemplatePath = PSDImporterConst.PSDUI_PATH;
+
+    [Header("UI预制件保存路径")]
+    public string m_uiPrefabSavePath = PSDImporterConst.UI_PREFAB_SAVE_PATH;
 }

@@ -1,7 +1,9 @@
 ﻿using UnityEditor;
 using UnityEngine;
 using System.IO;
+using System.Collections.Generic;
 using UnityEngine.EventSystems;
+using Base;
 
 #if UNITY_5_3
 using UnityEditor.SceneManagement;
@@ -145,6 +147,7 @@ namespace PSDUIImporter
 #endif
             PSDImportUtility.baseFilename = Path.GetFileNameWithoutExtension(xmlFilePath);
             PSDImportUtility.baseDirectory = "Assets/" + Path.GetDirectoryName(xmlFilePath.Remove(0, Application.dataPath.Length + 1)) + "/";
+            PSDImportUtility.bindItems = new List<BindItem>();
         }
 
         private void InitCanvas()
@@ -360,6 +363,26 @@ namespace PSDUIImporter
                     MoveAsset(layer.layers[layerIndex], PSDImportUtility.baseDirectory);
                 }
             }
+        }
+
+        //新增
+        public void SaveUIAsPrefab()
+        {
+            GameObject createdGO = PSDImportUtility.canvas.transform.GetChild(0).gameObject;
+            PrefabUtility.SaveAsPrefabAsset(createdGO, Application.dataPath + PSDImporterConst.UI_PREFAB_SAVE_PATH + createdGO.name + PSDImporterConst.PREFAB_SUFIX, out bool success);
+            Debug.Log("Save as " + createdGO.name + (success ? " success" : " failed"));
+        }
+
+        public void GenerateCode()
+        {
+            GameObject createdGO = PSDImportUtility.canvas.transform.GetChild(0).gameObject;
+            CodeGenerateCtrl.DoGenerateCode(createdGO);
+        }
+        public void AddInjections()
+        {
+            GameObject createdGO = PSDImportUtility.canvas.transform.GetChild(0).gameObject;
+            LuaBehaviour luaBehaviour = createdGO.AddComponent<LuaBehaviour>();
+            luaBehaviour.bindItems = PSDImportUtility.bindItems;
         }
     }
 }

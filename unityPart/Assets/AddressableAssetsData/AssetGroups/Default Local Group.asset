@@ -21,6 +21,10 @@ MonoBehaviour:
     m_Address: Assets/Prefabs/UI/Test.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: fa904cf4f7c2172488cf799ea10f3fbd
+    m_Address: Assets/Prefabs/UI/LoginView.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 846dc8bbbf810984f9d6bc9303cf4b29, type: 2}
   m_SchemaSet:

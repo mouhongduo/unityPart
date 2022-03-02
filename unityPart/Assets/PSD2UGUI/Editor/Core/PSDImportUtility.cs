@@ -5,6 +5,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using UnityEditor;
 using UnityEngine;
+using Base;
 
 namespace PSDUIImporter
 {
@@ -14,6 +15,8 @@ namespace PSDUIImporter
         public static string baseDirectory;
         public static Canvas canvas;
         public static GameObject eventSys;
+        public static List<BindItem> bindItems;
+        public static List<ActionItem> actionItems;
         public static readonly Dictionary<Transform, Transform> ParentDic = new Dictionary<Transform, Transform>();
 
         public static object DeserializeXml(string filePath, System.Type type)
@@ -48,7 +51,8 @@ namespace PSDUIImporter
 //             item.transform.SetParent(canvas.transform, false);
 //             ParentDic[item.transform] =  parent.transform;
 //             return item.GetComponent<T>();
-//         }
+//         }
+
 
         /// <summary>
         /// 加载并实例化prefab，编辑器下不用Resources.Load，否则这些预设会打到安装包

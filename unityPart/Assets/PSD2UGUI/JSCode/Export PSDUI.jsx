@@ -185,19 +185,19 @@ function exportLayerSet(_layer)
     }
     else
     {
-        sceneData += "<Layer>";
+        sceneData += "<layer>";
         sceneData += "<type>Normal</type>";
         sceneData += "<name>" + _layer.name + "</name>";    
         sceneData += "<layers>";
         exportAllLayers(_layer)
         sceneData += "</layers>";
-        sceneData += "</Layer>";
+        sceneData += "</layer>";
     }
 }
 
 function exportLayoutElement(obj)
 {
-    sceneData += "<Layer>";
+    sceneData += "<layer>";
     sceneData += "<type>LayoutElement</type>";
     var itemName = obj.name.substring(0, obj.name.search("@"));
     sceneData += "<name>" + itemName + "</name>";
@@ -223,13 +223,13 @@ function exportLayoutElement(obj)
 
     hideAllLayers(obj);
     
-    sceneData += "</Layer>";
+    sceneData += "</layer>";
 }
 
 function exportScrollView(obj)
 {
     var itemName = obj.name.substring(0, obj.name.search("@"));
-    sceneData += ("<Layer>\n<type>ScrollView</type>\n<name>" + itemName + "</name>\n");
+    sceneData += ("<layer>\n<type>ScrollView</type>\n<name>" + itemName + "</name>\n");
     sceneData += ("<layers>\n");
     exportAllLayers(obj);
     sceneData += ("</layers>");
@@ -303,7 +303,7 @@ function exportScrollView(obj)
     sceneData += "<string>" + Math.floor (paddingy) + "</string>";  
     sceneData += "</arguments>";
 
-    sceneData += "</Layer>";
+    sceneData += "</layer>";
 }
 
 function setLayerSizeAndPos(layer)
@@ -617,7 +617,13 @@ function exportLabel(obj,validFileName)
     obj.visible = false;    
     
     sceneData += "<arguments>";
-    sceneData += "<string>" + obj.textItem.color.rgb.hexValue + "</string>";
+    if(obj?.textItem?.color?.rgb?.hexValue == undefined){
+        sceneData += "<string>000000</string>";
+    }
+    else{
+        sceneData += "<string>" + obj.textItem.color.rgb.hexValue + "</string>";
+    }
+    
     
     if(StaticText == true)
     {

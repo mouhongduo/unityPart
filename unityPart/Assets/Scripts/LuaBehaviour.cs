@@ -12,18 +12,34 @@ using System.Collections.Generic;
 using XLua;
 using System;
 using System.IO;
+using Game;
 
-namespace Game
+namespace Base
 {
     [System.Serializable]
-    public class Injection
+    public class BindItem
     {
         public string name;
-        public GameObject value;
-        public Injection(string name, GameObject value)
+        public string funcName;
+        public string type;
+        public GameObject gameObject;
+        public BindItem(string name, string funcName, string type, GameObject gameObject)
         {
             this.name = name;
-            this.value = value;
+            this.funcName = funcName;
+            this.type = type;
+            this.gameObject = gameObject;
+        }
+    }
+
+    public class ActionItem
+    {
+        public string name;
+        public string funcName;
+        public ActionItem(string name, string funcName)
+        {
+            this.name = name;
+            this.funcName = funcName;
         }
     }
 
@@ -31,8 +47,7 @@ namespace Game
     [LuaCallCSharp]
     public class LuaBehaviour : MonoBehaviour
     {
-        public List<Injection> injections;
-
+        public List<BindItem> bindItems;
         internal static LuaEnv luaEnv; //all lua behaviour shared one luaenv only!
         internal static float lastGCTime = 0;
         internal const float GCInterval = 1;//1 second 
@@ -56,10 +71,10 @@ namespace Game
 
 
             scriptEnv.Set("self", this);
-
-            foreach (var injection in injections)
+            scriptEnv.Set("scriptName", this.name.Split('(')[0]);//取LoginView(Clone)中括号前的单词
+            foreach (var bindItem in bindItems)
             {
-                scriptEnv.Set(injection.name, injection.value);
+                scriptEnv.Set(bindItem.name, bindItem.gameObject);
             }
 
             byte[] byArrayReturn = null;
@@ -117,7 +132,7 @@ namespace Game
             luaUpdate = null;
             luaStart = null;
             scriptEnv.Dispose();
-            injections = null;
+            bindItems = null;
         }
     }
 }

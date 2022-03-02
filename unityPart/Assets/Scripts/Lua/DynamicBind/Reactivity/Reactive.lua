@@ -1,5 +1,5 @@
-local Dep = require("Reactivity\\Dep")
-local Effect = require("Reactivity\\Effect")
+local Dep = require("DynamicBind.Reactivity.Dep")
+local Effect = require("DynamicBind.Reactivity.Effect")
 local Reactive = {}
 
 local Proxy = {
