@@ -12,7 +12,6 @@ using System.Collections.Generic;
 using XLua;
 using System;
 using System.IO;
-using Game;
 
 namespace Base
 {
@@ -21,13 +20,13 @@ namespace Base
     {
         public string name;
         public string funcName;
-        public string type;
+        public string bindType;
         public GameObject gameObject;
-        public BindItem(string name, string funcName, string type, GameObject gameObject)
+        public BindItem(string name, string funcName, string bindType, GameObject gameObject)
         {
             this.name = name;
             this.funcName = funcName;
-            this.type = type;
+            this.bindType = bindType;
             this.gameObject = gameObject;
         }
     }

@@ -1,5 +1,7 @@
 local export = {
-    BindClick = "BindClick"
+    BindClick = "BindClick",
+    BindText  = "BindText",
+    BindInput = "BindInput",
 }
 
 

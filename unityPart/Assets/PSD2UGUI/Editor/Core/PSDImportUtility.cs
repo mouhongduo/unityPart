@@ -135,5 +135,39 @@ namespace PSDUIImporter
             if (comp != null)
                 UnityEngine.Object.Destroy(comp);
         }
+
+        public static void AddBindWithArguments(string name, string[] arguments, GameObject target)
+        {
+            foreach(string arg in arguments)
+            {
+                if (arg.Contains("="))
+                {
+                    string[] splited = arg.Split('=');
+                    string key = splited[0].ToLower();
+                    string value = splited[1];
+                    string type = "";
+                    switch (key)
+                    {
+                        case "act":
+                            type = "BindClick";
+                            break;
+                        case "show":
+                            type = "BindShow";
+                            break;
+                        case "text":
+                            type = "BindText";
+                            break;
+                        case "input":
+                            type = "BindInput";
+                            break;
+                        default:
+                            Debug.LogError("[\"Import Error\"]:unknown argument");
+                            break;
+                    }
+                    bindItems.Add(new BindItem(name, value, type, target));
+                }
+            }
+
+        }
     }
 }

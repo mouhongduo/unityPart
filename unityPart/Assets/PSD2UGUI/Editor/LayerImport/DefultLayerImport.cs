@@ -16,7 +16,13 @@ namespace PSDUIImporter
         }
         public void DrawLayer(Layer layer, GameObject parent)
         {
+            
             RectTransform obj = PSDImportUtility.LoadAndInstant<RectTransform>(PSDImporterConst.ASSET_PATH_EMPTY, layer.name, parent);
+            string[] args = layer.arguments;
+            if (args != null)
+            {
+                PSDImportUtility.AddBindWithArguments(layer.name, args, obj.gameObject);
+            }
             obj.offsetMin = Vector2.zero;
             obj.offsetMax = Vector2.zero;
             obj.anchorMin = Vector2.zero;

@@ -22,26 +22,7 @@ namespace PSDUIImporter
             string[] args = layer.arguments;
             if(args != null)
             {
-                foreach (string arg in args)
-                {
-                    string[] splited = arg.Split('=');
-                    string key = splited[0].ToLower();
-                    string value = splited[1];
-                    string type = "";
-                    if (key == "act")
-                    {
-                        type = "OnClick";
-                    }
-                    else if (key == "show")
-                    {
-                        type = "BindShow";
-                    }
-                    else
-                    {
-                        Debug.LogError("unvalid argument");
-                    }
-                    PSDImportUtility.bindItems.Add(new Base.BindItem(layer.name, value, type, button.gameObject));
-                }
+                PSDImportUtility.AddBindWithArguments(layer.name, args, button.gameObject);
             }
             
             if (layer.layers != null)

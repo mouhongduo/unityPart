@@ -1,5 +1,5 @@
 local Dep = require("DynamicBind.Reactivity.Dep")
-local Effect = require("DynamicBind.Reactivity.Effect")
+local Effect = Global.Effect
 local Reactive = {}
 
 local Proxy = {
@@ -9,6 +9,7 @@ local Proxy = {
 function Proxy.__index(table, key)
     Dep.track(table, key)
     return Proxy.data[key]
+
 end
 function Proxy.__newindex(table, key, val)
     Proxy.data[key] = val
@@ -57,7 +58,8 @@ function Reactive.computed(getter)--用ref来实现计算属性
     local ret = Ref:new()
 
     Effect.effect(function()
-        ret.value = getter()
+        local val = getter()
+        ret.value = val
     end)
 
     return ret

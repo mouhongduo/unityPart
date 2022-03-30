@@ -2,28 +2,33 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.UI;
 using XLua;
 
-namespace Game
+namespace Base
 {
     public class Main : MonoBehaviour
     {
         public static LuaEnv luaEnv = new LuaEnv();
         public List<IManager> managers = new List<IManager>();
+        public List<IController> controllers = new List<IController>();
         // Use this for initialization
         void Awake()
         {
             addLuaLoader();
+            luaEnv.DoString("require 'luaMain'");
             initAndAwakeManagers();
+            initAndAwakeControllers();
         }
         void Start()
         {
-            luaEnv.DoString("require 'luaMain'");
+            
         }
 
         // Update is called once per frame
         void Update()
         {
+            controllersUpdate();
             if (luaEnv != null)
             {
                 luaEnv.Tick();
@@ -51,6 +56,7 @@ namespace Game
                 return byArrayReturn;
             });
         }
+
         private void initAndAwakeManagers()
         {
             managers.Add(new UIManager());
@@ -58,6 +64,28 @@ namespace Game
             foreach(var manager in managers)
             {
                 manager.Awake();
+            }
+        }
+
+        private void initAndAwakeControllers()
+        {
+            CSharpCallLua cSharpCallLua = luaEnv.Global.Get<CSharpCallLua>("CSharpCallLua");
+            Debug.Log(cSharpCallLua.controllers.Count);
+            controllers = cSharpCallLua.controllers;
+            foreach(var controller in controllers)
+            {
+                controller.Awake();
+            }
+            //IController cameraController = cSharpCallLua.cameraController;
+            //cameraController.Awake();
+            Debug.Log("CSharpCallLua init over");
+        }
+
+        private void controllersUpdate()
+        {
+            foreach (var controller in controllers)
+            {
+                controller.Update();
             }
         }
     }

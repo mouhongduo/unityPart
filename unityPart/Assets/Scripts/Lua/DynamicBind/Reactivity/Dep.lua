@@ -1,4 +1,4 @@
-local Effect = require("DynamicBind\\Reactivity\\Effect")
+local Effect = Global.Effect
 local Dep = {}
 
 local targetMap = {} --weakTable
@@ -9,7 +9,6 @@ setmetatable(targetMap, weakKeyMt)
 
 function Dep.track(target, key)
     if(Effect.activeEffect ~= nil) then
-        print("Effect.activeEffect is" .. tostring(Effect.activeEffect) .. " and key is:" .. key)
         local depsMap = targetMap[target]
         if(depsMap == nil) then
             depsMap = {}--depsMap
@@ -21,19 +20,22 @@ function Dep.track(target, key)
             dep = {}
             depsMap[key] = dep--dep
         end
-        dep.effect = Effect.activeEffect
+        dep[#dep+1] = Effect.activeEffect
     else
-        print("Effect.activeEffect is null and key is:" .. key)
+        --print("Warn, Effect.activeEffect is null and key is:" .. key)
     end
 end
 
 function Dep.trigger(target, key)
+    print("begin trigger")
     local depsMap = targetMap[target]
     if(depsMap == nil) then
         return
     end
     local dep = depsMap[key]
+    local i = 0;
     for _, func in pairs(dep) do
+        i = i+1
         func()
     end
 end

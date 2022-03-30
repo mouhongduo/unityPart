@@ -19,8 +19,38 @@ namespace PSDUIImporter
         {
             //UnityEngine.UI.InputField temp = AssetDatabase.LoadAssetAtPath(PSDImporterConst.ASSET_PATH_INPUTFIELD, typeof(UnityEngine.UI.InputField)) as UnityEngine.UI.InputField;
             UnityEngine.UI.InputField inputfield = PSDImportUtility.LoadAndInstant<InputField>(PSDImporterConst.ASSET_PATH_INPUTFIELD, layer.name, parent);
-
+            string[] args = layer.arguments;
+            if (args != null)
+            {
+                PSDImportUtility.AddBindWithArguments(layer.name, args, inputfield.gameObject);
+            }
             inputfield.name = layer.name;
+
+            /////////////////////木红多
+            //string[] args = layer.arguments;
+            //if(args != null)
+            //{
+            //    foreach (string arg in args)
+            //    {
+            //        string[] splited = arg.Split('=');
+            //        string key = splited[0].ToLower();
+            //        string value = splited[1];
+            //        string type = "";
+            //        if (key == "val")
+            //        {
+            //            type = "BindText";
+            //        }
+            //        else if (key == "show")
+            //        {
+            //            type = "BindShow";
+            //        }
+            //        else
+            //        {
+            //            Debug.LogError("unvalid argument");
+            //        }
+            //        PSDImportUtility.bindItems.Add(new Base.BindItem(layer.name, value, type, inputfield.gameObject));
+            //    }
+            //}
 
             // 背景尺寸,用来限制文本框尺寸
             float _bgSize = 0;
@@ -148,6 +178,8 @@ namespace PSDUIImporter
                     //}
                 }
             }
+
+
 
             //if (layer.image != null)
             //{

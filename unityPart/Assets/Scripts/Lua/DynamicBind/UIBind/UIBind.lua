@@ -1,19 +1,49 @@
 local BindType = require "DynamicBind.UIBind.BindType"
+local Reactive = require "DynamicBind.Reactivity.Reactive"
+local Effect   = require "DynamicBind.Reactivity.Effect"
+local LoginModel = Global.Models["LoginModel"]
 local export = {}
 
 local funcMap  = {}
 function funcMap.BindClick(item, func)
-    print(item:GetComponent("Button"))
+    if(func == nil) then
+        func = function()
+            print("this is null function")
+        end
+    end
     item:GetComponent("Button").onClick:AddListener(func)
 end
 
+function funcMap.BindText(item, func)
+    if(func == nil) then
+        item:GetComponent("Text").text = "null"
+        return
+    end
+    local resource = Reactive.computed(function ()
+        item:GetComponent("Text").text = func()
+    end)
+end
+
+function funcMap.BindInput(item, func)
+    if(func == nil) then
+        print("this is nil")
+        return
+    end
+    local InputField = item:GetComponent("InputField")
+    local setter = func()
+    InputField.onValueChange:AddListener(function()
+        setter(InputField.text)
+        print("UserPassword:" .. LoginModel.Getter.GetUserPassword())
+        print("UserAccount:" .. LoginModel.Getter.GetUserAccount())
+    end)
+end
+
+
 function export.CreateView(BindMap, vm)
     for key, value in ipairs(BindMap) do
-        print("name:" .. value.name .. ",func:" .. tostring(value.func) .. ",bindtype:" .. value.bindType)
         local item = vm[value.name]
-        if(value.bindType == BindType.BindClick) then
-            funcMap[value.bindType](item, value.func)
-        end
+        print("type is:" .. value.bindType)
+        funcMap[value.bindType](item, value.func)
     end
     
 end

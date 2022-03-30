@@ -6,17 +6,21 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 using XLua;
 using UnityEngine.UI;
 
-namespace Game
+namespace Base
 {
     [LuaCallCSharp]
     public class UIManager : IManager
     {
         public static GameObject canvasGO;
+        public static GameObject ObjectPool;
         GameObject UICamera;
+        static Dictionary<string, GameObject> UIMap = new Dictionary<string, GameObject>();
+        static Dictionary<string, GameObject> PoolMap = new Dictionary<string, GameObject>();
         public void Awake()
         {
             UICamera = GameObject.Find("UICamera");
             canvasGO = GameObject.Find("Canvas");
+            ObjectPool = GameObject.Find("ObjectPool");
             if(canvasGO == null)
             {
                 canvasGO = new GameObject("Canvas");
@@ -37,10 +41,18 @@ namespace Game
         private static void OnLoadOver(AsyncOperationHandle<GameObject> obj)
         {
             GameObject gameObject = obj.Result;
-            Object.Instantiate(gameObject,canvasGO.transform); 
+            var ui = Object.Instantiate(gameObject,canvasGO.transform);
+            UIMap.Add(gameObject.name, ui);
         }
 
-        
+        public static void CloseUI(string name)
+        {
+            UIMap.TryGetValue(name, out GameObject ui);
+            UIMap.Remove(name);
+            ui.transform.SetParent(ObjectPool.transform);
+            ui.SetActive(false);
+            PoolMap.Add(name, ui);
+        }
     }
 }
 
