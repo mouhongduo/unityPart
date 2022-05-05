@@ -1,0 +1,29 @@
+.package {
+    type 0 : integer
+    session 1 : integer
+  }
+  
+  heartbeat 101 {}
+
+  join 1 {
+    request {
+      name 0 : string
+    }
+    response {
+      code 0 : integer
+      statu 1 : integer
+      id 2 : integer
+    }
+  }
+
+  battle 2 {
+    request {
+      positionX 0 : double
+      positionY 1 : double
+      positionZ 2 : double
+    }
+    response {
+      code 0 : integer
+    }
+  }
+  

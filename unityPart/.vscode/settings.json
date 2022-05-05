@@ -4,6 +4,7 @@
         "CS",
         "start",
         "update",
-        "ondestroy"
+        "ondestroy",
+        "xlua"
     ]
 }

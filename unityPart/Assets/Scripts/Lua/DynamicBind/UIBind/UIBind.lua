@@ -33,19 +33,17 @@ function funcMap.BindInput(item, func)
     local setter = func()
     InputField.onValueChange:AddListener(function()
         setter(InputField.text)
-        print("UserPassword:" .. LoginModel.Getter.GetUserPassword())
-        print("UserAccount:" .. LoginModel.Getter.GetUserAccount())
     end)
 end
-
+function funcMap.BindShow(item, func)
+    item:SetActive(false)
+end
 
 function export.CreateView(BindMap, vm)
     for key, value in ipairs(BindMap) do
         local item = vm[value.name]
-        print("type is:" .. value.bindType)
         funcMap[value.bindType](item, value.func)
     end
-    
 end
 
 return export

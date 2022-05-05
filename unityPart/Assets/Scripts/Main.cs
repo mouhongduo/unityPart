@@ -10,25 +10,33 @@ namespace Base
     public class Main : MonoBehaviour
     {
         public static LuaEnv luaEnv = new LuaEnv();
+        public static CSharpCallLua cSharpCallLua;
         public List<IManager> managers = new List<IManager>();
-        public List<IController> controllers = new List<IController>();
+        public Dictionary<string, IController> controllersMap = new Dictionary<string, IController>();
+        public Dictionary<string, IManager> managersMap = new Dictionary<string, IManager>();
+        public float lastTime10;
+        public float lastTime50;
+        public float lastTime100;
         // Use this for initialization
         void Awake()
         {
             addLuaLoader();
             luaEnv.DoString("require 'luaMain'");
+            cSharpCallLua = luaEnv.Global.Get<CSharpCallLua>("CSharpCallLua");
             initAndAwakeManagers();
             initAndAwakeControllers();
         }
         void Start()
         {
-            
+            controllersStart();
+            managersStart();
         }
 
         // Update is called once per frame
         void Update()
         {
             controllersUpdate();
+            managersUpdate();
             if (luaEnv != null)
             {
                 luaEnv.Tick();
@@ -57,35 +65,73 @@ namespace Base
             });
         }
 
+
         private void initAndAwakeManagers()
         {
+            managersMap = cSharpCallLua.managersMap;
+            managers.Add(new ServerManager());
+            managers.Add(new SpawnManager());
             managers.Add(new UIManager());
 
             foreach(var manager in managers)
             {
                 manager.Awake();
             }
+             foreach (var pair in managersMap)
+            {
+                pair.Value.Awake();
+            }
         }
 
         private void initAndAwakeControllers()
         {
-            CSharpCallLua cSharpCallLua = luaEnv.Global.Get<CSharpCallLua>("CSharpCallLua");
-            Debug.Log(cSharpCallLua.controllers.Count);
-            controllers = cSharpCallLua.controllers;
-            foreach(var controller in controllers)
+            
+            controllersMap = cSharpCallLua.controllersMap;
+            foreach(var pair in controllersMap)
             {
-                controller.Awake();
+                pair.Value.Awake();
             }
             //IController cameraController = cSharpCallLua.cameraController;
             //cameraController.Awake();
             Debug.Log("CSharpCallLua init over");
         }
 
+        private void controllersStart()
+        {
+            foreach (var pair in controllersMap)
+            {
+                pair.Value.Start();
+            }
+        }
+
         private void controllersUpdate()
         {
-            foreach (var controller in controllers)
+            foreach (var pair in controllersMap)
             {
-                controller.Update();
+                pair.Value.Update();
+            }
+        }
+        private void managersUpdate()
+        {
+            foreach (var manager in managers)
+            {
+                manager.Update();
+            }
+            foreach (var pair in managersMap)
+            {
+                pair.Value.Update();
+            }
+        }
+
+        private void managersStart()
+        {
+            foreach (var pair in managersMap)
+            {
+                pair.Value.Start();
+            }
+            foreach (var manager in managers)
+            {
+                manager.Start();
             }
         }
     }

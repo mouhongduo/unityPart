@@ -1,24 +1,43 @@
-local Vector3 = CS.UnityEngine.Vector3;
+-- local Vector3 = CS.UnityEngine.Vector3;
 
-local private = {
-    RotateScalse = 8.0
-}
-local public  = {}
+-- local private = {
+--     RotateScale = 8.0,
+--     VerticalRange = {
+--         min = 0,
+--         max = 60
+--     }
+-- }
+-- local public  = {}
 
 
 
-public.Awake = function()
-    private.avatar = CS.UnityEngine.GameObject.Find("Avatar")
-    private.camera = CS.UnityEngine.GameObject.Find("MainCamera")
-    print(private.avatar.name);
-end
+-- public.Awake = function()
+    
+-- end
 
-public.Start = function()
-end
+-- public.SetAvatar = function(avatar)
+--     private.avatar = avatar
+--     private.camera.transform.position =  Vector3(private.avatar.transform.position.x,private.avatar.transform.position.y + 2,private.avatar.transform.position.z-2.5)
+-- end
 
-public.Update = function()
-    local centerPos = private.avatar.transform.position;
-    private.camera.transform:Rotate(centerPos, Vector3.up, CS.UnityEngine.Input.GetAxisRaw("Mouse X" * CS.UnityEngine.Time.timeScale * private.RotateScalse))
-end
+-- public.Start = function()
+--     private.avatar = nil
+--     private.camera = Global.mainCamera
+--     private.LogicManager = Global.Managers.LogicManager
+-- end
 
-return public
+-- public.Update = function()
+--     if(private.avatar ~= nil and private.LogicManager.isBattle) then
+--         local centerPos = private.avatar.transform.position;
+--         private.camera.transform:RotateAround(centerPos, Vector3.up, CS.UnityEngine.Input.GetAxisRaw("Mouse X") * CS.UnityEngine.Time.timeScale * private.RotateScale)
+--         local oldPos = private.camera.transform.position
+--         local oldRatation = private.camera.transform.rotation
+--         private.camera.transform:RotateAround(centerPos, private.camera.transform.right, CS.UnityEngine.Input.GetAxisRaw("Mouse Y") * CS.UnityEngine.Time.timeScale * private.RotateScale / 4)
+--         if(private.camera.transform.rotation.eulerAngles.x < private.VerticalRange.min or private.camera.transform.rotation.eulerAngles.x > private.VerticalRange.max) then
+--             private.camera.transform.position = oldPos;
+--             private.camera.transform.rotation = oldRatation;
+--         end
+--     end
+-- end
+
+-- return public

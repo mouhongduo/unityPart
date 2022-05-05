@@ -1,8 +1,9 @@
 print("xlua start")
 
-Global = require("Global")
 CSharpCallLua = require("CSharpCallLua.CSharpCallLua")
+Global = require("Global")
 
-for key, value in pairs(_G) do
-    print(tostring(key) .. ":" .. tostring(value))
-end
+
+UIEnum = require("Config.UIEnum")
+RolerEnum = require("Config.RolerEnum")
+Global.Managers.UIManager.OpenUI(UIEnum.Home.path .. UIEnum.Home.name)

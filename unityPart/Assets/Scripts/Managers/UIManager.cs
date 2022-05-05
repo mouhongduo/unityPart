@@ -53,6 +53,16 @@ namespace Base
             ui.SetActive(false);
             PoolMap.Add(name, ui);
         }
+
+        public void Update()
+        {
+
+        }
+
+        public void Start()
+        {
+            
+        }
     }
 }
 
