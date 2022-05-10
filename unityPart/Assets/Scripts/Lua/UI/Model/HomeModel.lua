@@ -6,18 +6,24 @@ local model = {
 	matchTime = nil,
 	isMatch = false,
 }
+
+local React = Reactive.reactive(model)
+
 local Setter = {
 	SetMatchTime = function(newValue)
-		model.matchTime = newValue
+		React.matchTime = newValue
 	end,
 	SetIsMatch = function(newValue)
-		model.isMatch = newValue
+		React.isMatch = newValue
+		print("newIsMatch", model.isMatch)
 	end
 }
 local Getter = {
 	GetMatchTime = function()
-		return model.matchTime
+		return React.matchTime
 	end,
+	GetIsMatch = function()
+		return React.isMatch
+	end
 }
-local React = Reactive.reactive(model)
 return {Setter = Setter,  Getter = Getter}

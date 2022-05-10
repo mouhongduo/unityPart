@@ -27,5 +27,5 @@ export.controllers.CameraController = CSharpCallLua.controllersMap.CameraControl
 export.avatar = CS.UnityEngine.GameObject.Find("Avatar")
 export.mainCamera = CS.UnityEngine.GameObject.Find("MainCamera")
 
-
+export.Timer = CSharpCallLua.timer
 return export

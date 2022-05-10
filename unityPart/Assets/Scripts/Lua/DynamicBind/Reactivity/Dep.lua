@@ -27,7 +27,6 @@ function Dep.track(target, key)
 end
 
 function Dep.trigger(target, key)
-    print("begin trigger")
     local depsMap = targetMap[target]
     if(depsMap == nil) then
         return

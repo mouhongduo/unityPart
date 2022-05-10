@@ -36,7 +36,14 @@ function funcMap.BindInput(item, func)
     end)
 end
 function funcMap.BindShow(item, func)
-    item:SetActive(false)
+    if(func == nil) then
+        item:SetActive(false)
+    else
+        local resource = Reactive.computed(function ()
+            local isShow = func()
+            item:SetActive(isShow)
+        end)
+    end
 end
 
 function export.CreateView(BindMap, vm)

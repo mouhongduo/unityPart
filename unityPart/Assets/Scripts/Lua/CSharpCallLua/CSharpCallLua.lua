@@ -14,5 +14,9 @@ export.SetAvatarAndEnemy = function(self, avatar, enemy)
     Global.enemy = enemy
     export.controllersMap.CameraController.SetAvatar(avatar)
 end
+export.OnGameBegin = function(self)
+    local GameManager = Global.Managers.GameManager
+    GameManager.OnGameBegin()
+end
 
 return export

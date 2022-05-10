@@ -15,7 +15,8 @@ local public = {
     cameraEnitity = nil,
     beAttacking = false,
     attackBeginFrame = 0,
-    preInput = {}
+    preInput = {},
+    battle = nil
 }
 local private = {
     
@@ -35,10 +36,12 @@ end
 public.BeginOnlineBattle = function ()
     public.avatarEntity = private.entity_mgr:create_entity("transformComponent", "rolerComponent", "InputComponent", "Avatar")
     public.cameraEntity = private.entity_mgr:create_entity("transformComponent", "cameraComponent", "Camera", "InputComponent")
+    public.enemyEntity = private.entity_mgr:create_entity("transformComponent", "rolerComponent", "InputComponent", "Enemy")
     private.GameManager = Global and Global.Managers and Global.Managers.GameManager or nil
     if(private.GameManager ~= nil) then
         private.GameManager.AddEntityMaps(public.avatarEntity, Global.avatar)
         private.GameManager.AddEntityMaps(public.cameraEntity, Global.mainCamera)
+        private.GameManager.AddEntityMaps(public.enemyEntity, Global.enemy)
     end
 
     local TransformComponent = require("ECS.src.Components.TransformComponent")
@@ -47,6 +50,13 @@ public.BeginOnlineBattle = function ()
     local avaRoler = RolerComponent.New()
     private.entity_mgr:set_component(public.avatarEntity, "transformComponent", avaTransform)
     private.entity_mgr:set_component(public.avatarEntity, "rolerComponent", avaRoler)
+
+
+    local avaTransform = TransformComponent.New(Global.enemy.transform.position, Global.enemy.transform.rotation.eulerAngles, Global.enemy.transform.forward, Global.enemy.transform.right)
+    local avaRoler = RolerComponent.New()
+    private.entity_mgr:set_component(public.enemyEntity, "transformComponent", avaTransform)
+    private.entity_mgr:set_component(public.enemyEntity, "rolerComponent", avaRoler)
+
 
     local CameraComponnet = require("ECS.src.Components.CameraComponent")
     local cameraTransform = TransformComponent.New(Global.mainCamera.transform.position, Global.mainCamera.transform.rotation.eulerAngles)
@@ -66,44 +76,124 @@ private.AddInputSystem = function()
         self:foreach(avatarInput, function(entity)
             local rolerState = entity.rolerComponent
             if(private.Input.GetKey(private.KeyCode.W) and private.Input.GetKey(private.KeyCode.LeftShift)) then
-                print("W+Shift")
-                rolerState.Run = true
+                rolerState.RollForward = true
             elseif(private.Input.GetKey(private.KeyCode.W)) then
-                print("W")
-                rolerState.Walk = true
+                rolerState.Run = true
             else
-                rolerState.Walk = false
                 rolerState.Run = false
+                rolerState.RollForward = false
             end
 
-                
-            if(private.Input.GetKey(private.KeyCode.S)) then
-                rolerState.WalkBack = true
+            if(private.Input.GetKey(private.KeyCode.LeftShift)) then
+                if(private.Input.GetKey(private.KeyCode.A)) then
+                    rolerState.RollLeft = true
+                end
+                if(private.Input.GetKey(private.KeyCode.D)) then
+                    rolerState.RollRight = true
+                end
             else
-                rolerState.WalkBack = false
+                if(private.Input.GetKey(private.KeyCode.S)) then
+                    rolerState.WalkBack = true
+                else
+                    rolerState.WalkBack = false
+                end
+    
+                if(private.Input.GetKey(private.KeyCode.A)) then
+                    rolerState.RunLeft = true
+                else
+                    rolerState.RunLeft = false
+                end
+                if(private.Input.GetKey(private.KeyCode.D)) then
+                    rolerState.RunRight = true
+                else
+                    rolerState.RunRight = false
+                end
+                rolerState.RollRight = false
+                rolerState.RollLeft = false
+            end
+            
+
+            
+            if(private.Input.GetKey(private.KeyCode.Mouse0)) then
+                if(public.preInput == nil) then
+                    public.preInput = 0
+                else
+                    rolerState.LeftAttack = (rolerState.LeftAttack == rolerState.LeftAttackMax and 1 or rolerState.LeftAttack+1)
+                    public.beAttacking = true
+                    public.attackBeginFrame = public.frameCount
+                end
+                -- print(rolerState.LeftAttack)
+            elseif (private.Input.GetKey(private.KeyCode.Mouse1)) then
+                if(public.preInput == nil) then
+                    public.preInput = 1
+                else
+                    rolerState.RightAttack = (rolerState.RightAttack == rolerState.RightAttackMax and 1 or rolerState.RightAttack+1)
+                    public.beAttacking = true
+                    public.attackBeginFrame = public.frameCount
+                end
+            else
+                if(public.preInput ~= nil) then
+                    if(public.preInput == 1) then
+                        rolerState.LeftAttack = (rolerState.LeftAttack == rolerState.LeftAttackMax and 1 or rolerState.LeftAttack+1)
+                    else
+                        rolerState.RightAttack = (rolerState.RightAttack == rolerState.RightAttackMax and 1 or rolerState.RightAttack+1)
+                    end
+                    public.attackBeginFrame = public.frameCount
+                    public.preInput = nil
+                else
+                    if(public.frameCount - public.attackBeginFrame >= 10) then
+                        public.beAttacking = false
+                    end
+                    rolerState.LeftAttack = 0
+                    rolerState.RightAttack = 0
+                end
+            end
+            
+            if(private.GameManager ~= nil) then
+                private.GameManager.RenderActor(entity.entity ,rolerState)
+            end
+        end)
+
+        local enemyInput = ecs.all("InputComponent", "Enemy")
+        self:foreach(enemyInput, function(entity)
+            local rolerState = entity.rolerComponent
+            if(private.Input.GetKey(private.KeyCode.W) and private.Input.GetKey(private.KeyCode.LeftShift)) then
+                rolerState.RollForward = true
+            elseif(private.Input.GetKey(private.KeyCode.W)) then
+                rolerState.Run = true
+            else
+                rolerState.Run = false
+                rolerState.RollForward = false
             end
 
-            if(private.Input.GetKey(private.KeyCode.A)) then
-                rolerState.RunLeft = true
+            if(private.Input.GetKey(private.KeyCode.LeftShift)) then
+                if(private.Input.GetKey(private.KeyCode.A)) then
+                    rolerState.RollLeft = true
+                end
+                if(private.Input.GetKey(private.KeyCode.D)) then
+                    rolerState.RollRight = true
+                end
             else
-                rolerState.RunLeft = false
+                if(private.Input.GetKey(private.KeyCode.S)) then
+                    rolerState.WalkBack = true
+                else
+                    rolerState.WalkBack = false
+                end
+    
+                if(private.Input.GetKey(private.KeyCode.A)) then
+                    rolerState.RunLeft = true
+                else
+                    rolerState.RunLeft = false
+                end
+                if(private.Input.GetKey(private.KeyCode.D)) then
+                    rolerState.RunRight = true
+                else
+                    rolerState.RunRight = false
+                end
+                rolerState.RollRight = false
+                rolerState.RollLeft = false
             end
-            if(private.Input.GetKey(private.KeyCode.D)) then
-                rolerState.RunRight = true
-            else
-                rolerState.RunRight = false
-            end
-
-            if(private.Input.GetKey(private.KeyCode.W) and private.Input.GetKey(private.KeyCode.A)) then
-                rolerState.RunLeftFront = true
-            else
-                rolerState.RunLeftFront = false
-            end
-            if(private.Input.GetKey(private.KeyCode.W) and private.Input.GetKey(private.KeyCode.D)) then
-                rolerState.RunRightFront = true
-            else
-                rolerState.RunRightFront = false
-            end
+            
 
             
             if(private.Input.GetKey(private.KeyCode.Mouse0)) then
@@ -171,12 +261,13 @@ end
 private.AddTransformSystem = function()
     local transformSystem = ecs.class("transformSystem", ecs.system)
     function transformSystem:on_update()
-        local transRolerFilter = ecs.all("transformComponent", "rolerComponent")
-        self:foreach(transRolerFilter, function(entity)
+        local transformFilter = ecs.all("transformComponent","rolerComponent")
+        self:foreach(transformFilter, function(entity)
             local transform = entity.transformComponent
             local rolerState = entity.rolerComponent
             local speedScale = rolerState.Run and rolerState.speedScale or 1
-            if(rolerState.Walk) then
+            local Timer = Global.Timer
+            if(rolerState.Run) then
                 transform.position = Vector3(transform.position.x + transform.forward.x * rolerState.speed * speedScale,
                 transform.position.y + transform.forward.y * rolerState.speed * speedScale,
                 transform.position.z + transform.forward.z * rolerState.speed * speedScale)
@@ -184,7 +275,7 @@ private.AddTransformSystem = function()
                 transform.position = Vector3(transform.position.x - transform.forward.x * rolerState.backSpeed,
                 transform.position.y - transform.forward.y * rolerState.backSpeed,
                 transform.position.z - transform.forward.z * rolerState.backSpeed)
-            elseif (rolerState.RunLeft) then 
+            elseif (rolerState.RunLeft) then
                 transform.position = Vector3(transform.position.x - transform.right.x * rolerState.backSpeed,
                 transform.position.y - transform.right.y * rolerState.backSpeed,
                 transform.position.z - transform.right.z * rolerState.backSpeed)
@@ -192,15 +283,53 @@ private.AddTransformSystem = function()
                 transform.position = Vector3(transform.position.x + transform.right.x * rolerState.backSpeed,
                 transform.position.y + transform.right.y * rolerState.backSpeed,
                 transform.position.z + transform.right.z * rolerState.backSpeed)
+            elseif( rolerState.RollForward) then
+                transform.position = Vector3(transform.position.x + transform.forward.x * rolerState.speed * 2,
+                transform.position.y + transform.forward.y * rolerState.speed * 2,
+                transform.position.z + transform.forward.z * rolerState.speed * 2)
+            elseif(rolerState.RollLeft) then
+                Timer.AddTask(function()
+                    transform.position = Vector3(transform.position.x - transform.right.x * rolerState.speed * 2,
+                        transform.position.y - transform.right.y * rolerState.speed * 2,
+                        transform.position.z - transform.right.z * rolerState.speed * 2)
+                    end, Timer.Type.TEN, 500)
+            elseif(rolerState.RollRight) then
+                transform.position = Vector3(transform.position.x + transform.right.x * rolerState.speed * 2,
+                transform.position.y + transform.right.y * rolerState.speed * 2,
+                transform.position.z + transform.right.z * rolerState.speed * 2)
             end
+            transform.rotation.z = 0
             if(private.GameManager ~= nil) then
                 private.GameManager.RenderTransform(entity.entity ,transform)
             end
-            if(private.ServerManager ~= nil) then
-                private.ServerManager.SendBattle(transform.position)
-            end
         end)
-
+        local avatarFilter = ecs.all("avatar")
+        self:foreach(avatarFilter, function(entity)
+            local transform = entity.transformComponent
+            
+            local transformMsg = {
+                transform = {
+                    x = transform.position.x,
+                    y = transform.position.y,
+                    z = transform.position.z,
+                },
+                rotation = {
+                    x = transform.rotation.x,
+                    y = transform.rotation.y,
+                    z = transform.rotation.z,
+                },
+                forward = {
+                    x = transform.forward.x,
+                    y = transform.forward.y,
+                    z = transform.forward.z,
+                },
+                right = {
+                    x = transform.right.x,
+                    y = transform.right.y,
+                    z = transform.right.z,
+                }
+            }
+        end)
         -- local transCameraFilter = ecs.all("transformComponent", "Camera")
         -- local i = 0
         -- self:foreach(transCameraFilter, function(entity)
@@ -228,6 +357,10 @@ public.Update = function()
         public.frameCount = public.frameCount+1
         private.world:update()
         public.lastTime = thisTime
+        if(public.battle ~= nil and public.battle.rolerState ~= nil and public.battle.transform ~= nil and private.ServerManager ~= nil) then
+            private.ServerManager.SendBattle(public.battle)
+            public.battle = nil
+        end
     end
 end
 

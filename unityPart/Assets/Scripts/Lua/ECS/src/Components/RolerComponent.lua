@@ -10,12 +10,14 @@ export.New = function()
         TurnBack = false,
         RunLeft = false,
         RunRight = false,
-        RunLeftFront = false,
-        RunRightFront = false,
+        RollForward = false,
+        RollLeft = false,
+        RollRight = false,
         LeftAttack = 0,
         RightAttack = 0,
         LeftAttackMax = 1,
-        RightAttackMax = 1
+        RightAttackMax = 1,
+        beAttacked = false
     }
     return RolerComponent
 end

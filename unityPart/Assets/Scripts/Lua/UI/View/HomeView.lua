@@ -21,10 +21,10 @@ BindEvent = {
 		Global.Managers.GameManager.BeginOnlineBattle()
 	end,
 	showMatchBox = function()
-		return HomeModel.isMatch
+		return HomeModel.Getter.GetIsMatch()
 	end,
 	matchTime = function()
-		return HomeModel.matchTime
+		return HomeModel.Getter.GetMatchTime()
 	end,
 --endregion
 }
