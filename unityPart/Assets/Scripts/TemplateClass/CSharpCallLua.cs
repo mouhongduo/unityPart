@@ -11,6 +11,7 @@ public interface CSharpCallLua
     public Dictionary<string, IManager> managersMap { get; set; }
     public ITimer timer { get; set; }
     public void SetAvatarAndEnemy(GameObject avatar, GameObject enemy);
+    public void OnGameBegin();
     //public IController cameraController;
     //public List<IController> controllers;
 }

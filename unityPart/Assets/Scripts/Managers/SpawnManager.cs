@@ -12,7 +12,10 @@ namespace Base
     public class SpawnManager : IManager
     {
         public static Dictionary<string, GameObject> prefabsMap = new Dictionary<string, GameObject>();
-        public string[] prefabNames = { "Assets/Prefabs/Roler/BlackMan.prefab" };
+        public string[] prefabNames = { 
+            "Assets/Prefabs/Roler/BlackMan.prefab",
+            "Assets/Prefabs/Roler/NewBlackMan.prefab"
+        };
         public void Awake()
         {
             LoadAllPrefab();

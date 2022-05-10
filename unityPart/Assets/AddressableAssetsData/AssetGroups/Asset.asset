@@ -33,6 +33,10 @@ MonoBehaviour:
     m_Address: Assets/Prefabs/UI/HomeView.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: 457d96ac50461ab45a93d352cfd36855
+    m_Address: Assets/Prefabs/Roler/NewBlackMan.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 846dc8bbbf810984f9d6bc9303cf4b29, type: 2}
   m_SchemaSet:

@@ -6,37 +6,416 @@ using Sproto;
 using System.Collections.Generic;
 
 namespace SprotoType { 
+	public class Position : SprotoTypeBase {
+		private static int max_field_count = 3;
+		
+		
+		private string _x; // tag 0
+		public string x {
+			get { return _x; }
+			set { base.has_field.set_field (0, true); _x = value; }
+		}
+		public bool HasX {
+			get { return base.has_field.has_field (0); }
+		}
+
+		private string _y; // tag 1
+		public string y {
+			get { return _y; }
+			set { base.has_field.set_field (1, true); _y = value; }
+		}
+		public bool HasY {
+			get { return base.has_field.has_field (1); }
+		}
+
+		private string _z; // tag 2
+		public string z {
+			get { return _z; }
+			set { base.has_field.set_field (2, true); _z = value; }
+		}
+		public bool HasZ {
+			get { return base.has_field.has_field (2); }
+		}
+
+		public Position () : base(max_field_count) {}
+
+		public Position (byte[] buffer) : base(max_field_count, buffer) {
+			this.decode ();
+		}
+
+		protected override void decode () {
+			int tag = -1;
+			while (-1 != (tag = base.deserialize.read_tag ())) {
+				switch (tag) {
+				case 0:
+					this.x = base.deserialize.read_string ();
+					break;
+				case 1:
+					this.y = base.deserialize.read_string ();
+					break;
+				case 2:
+					this.z = base.deserialize.read_string ();
+					break;
+				default:
+					base.deserialize.read_unknow_data ();
+					break;
+				}
+			}
+		}
+
+		public override int encode (SprotoStream stream) {
+			base.serialize.open (stream);
+
+			if (base.has_field.has_field (0)) {
+				base.serialize.write_string (this.x, 0);
+			}
+
+			if (base.has_field.has_field (1)) {
+				base.serialize.write_string (this.y, 1);
+			}
+
+			if (base.has_field.has_field (2)) {
+				base.serialize.write_string (this.z, 2);
+			}
+
+			return base.serialize.close ();
+		}
+	}
+
+
+	public class RolerState : SprotoTypeBase {
+		private static int max_field_count = 9;
+		
+		
+		private bool _Walk; // tag 0
+		public bool Walk {
+			get { return _Walk; }
+			set { base.has_field.set_field (0, true); _Walk = value; }
+		}
+		public bool HasWalk {
+			get { return base.has_field.has_field (0); }
+		}
+
+		private bool _WalkBack; // tag 1
+		public bool WalkBack {
+			get { return _WalkBack; }
+			set { base.has_field.set_field (1, true); _WalkBack = value; }
+		}
+		public bool HasWalkBack {
+			get { return base.has_field.has_field (1); }
+		}
+
+		private bool _RunLeft; // tag 2
+		public bool RunLeft {
+			get { return _RunLeft; }
+			set { base.has_field.set_field (2, true); _RunLeft = value; }
+		}
+		public bool HasRunLeft {
+			get { return base.has_field.has_field (2); }
+		}
+
+		private bool _RunRight; // tag 3
+		public bool RunRight {
+			get { return _RunRight; }
+			set { base.has_field.set_field (3, true); _RunRight = value; }
+		}
+		public bool HasRunRight {
+			get { return base.has_field.has_field (3); }
+		}
+
+		private bool _RollForward; // tag 4
+		public bool RollForward {
+			get { return _RollForward; }
+			set { base.has_field.set_field (4, true); _RollForward = value; }
+		}
+		public bool HasRollForward {
+			get { return base.has_field.has_field (4); }
+		}
+
+		private Int64 _LeftAttack; // tag 5
+		public Int64 LeftAttack {
+			get { return _LeftAttack; }
+			set { base.has_field.set_field (5, true); _LeftAttack = value; }
+		}
+		public bool HasLeftAttack {
+			get { return base.has_field.has_field (5); }
+		}
+
+		private Int64 _RightAttack; // tag 6
+		public Int64 RightAttack {
+			get { return _RightAttack; }
+			set { base.has_field.set_field (6, true); _RightAttack = value; }
+		}
+		public bool HasRightAttack {
+			get { return base.has_field.has_field (6); }
+		}
+
+		private bool _RollLeft; // tag 7
+		public bool RollLeft {
+			get { return _RollLeft; }
+			set { base.has_field.set_field (7, true); _RollLeft = value; }
+		}
+		public bool HasRollLeft {
+			get { return base.has_field.has_field (7); }
+		}
+
+		private bool _RollRight; // tag 8
+		public bool RollRight {
+			get { return _RollRight; }
+			set { base.has_field.set_field (8, true); _RollRight = value; }
+		}
+		public bool HasRollRight {
+			get { return base.has_field.has_field (8); }
+		}
+
+		public RolerState () : base(max_field_count) {}
+
+		public RolerState (byte[] buffer) : base(max_field_count, buffer) {
+			this.decode ();
+		}
+
+		protected override void decode () {
+			int tag = -1;
+			while (-1 != (tag = base.deserialize.read_tag ())) {
+				switch (tag) {
+				case 0:
+					this.Walk = base.deserialize.read_boolean ();
+					break;
+				case 1:
+					this.WalkBack = base.deserialize.read_boolean ();
+					break;
+				case 2:
+					this.RunLeft = base.deserialize.read_boolean ();
+					break;
+				case 3:
+					this.RunRight = base.deserialize.read_boolean ();
+					break;
+				case 4:
+					this.RollForward = base.deserialize.read_boolean ();
+					break;
+				case 5:
+					this.LeftAttack = base.deserialize.read_integer ();
+					break;
+				case 6:
+					this.RightAttack = base.deserialize.read_integer ();
+					break;
+				case 7:
+					this.RollLeft = base.deserialize.read_boolean ();
+					break;
+				case 8:
+					this.RollRight = base.deserialize.read_boolean ();
+					break;
+				default:
+					base.deserialize.read_unknow_data ();
+					break;
+				}
+			}
+		}
+
+		public override int encode (SprotoStream stream) {
+			base.serialize.open (stream);
+
+			if (base.has_field.has_field (0)) {
+				base.serialize.write_boolean (this.Walk, 0);
+			}
+
+			if (base.has_field.has_field (1)) {
+				base.serialize.write_boolean (this.WalkBack, 1);
+			}
+
+			if (base.has_field.has_field (2)) {
+				base.serialize.write_boolean (this.RunLeft, 2);
+			}
+
+			if (base.has_field.has_field (3)) {
+				base.serialize.write_boolean (this.RunRight, 3);
+			}
+
+			if (base.has_field.has_field (4)) {
+				base.serialize.write_boolean (this.RollForward, 4);
+			}
+
+			if (base.has_field.has_field (5)) {
+				base.serialize.write_integer (this.LeftAttack, 5);
+			}
+
+			if (base.has_field.has_field (6)) {
+				base.serialize.write_integer (this.RightAttack, 6);
+			}
+
+			if (base.has_field.has_field (7)) {
+				base.serialize.write_boolean (this.RollLeft, 7);
+			}
+
+			if (base.has_field.has_field (8)) {
+				base.serialize.write_boolean (this.RollRight, 8);
+			}
+
+			return base.serialize.close ();
+		}
+	}
+
+
+	public class Rotation : SprotoTypeBase {
+		private static int max_field_count = 3;
+		
+		
+		private string _x; // tag 0
+		public string x {
+			get { return _x; }
+			set { base.has_field.set_field (0, true); _x = value; }
+		}
+		public bool HasX {
+			get { return base.has_field.has_field (0); }
+		}
+
+		private string _y; // tag 1
+		public string y {
+			get { return _y; }
+			set { base.has_field.set_field (1, true); _y = value; }
+		}
+		public bool HasY {
+			get { return base.has_field.has_field (1); }
+		}
+
+		private string _z; // tag 2
+		public string z {
+			get { return _z; }
+			set { base.has_field.set_field (2, true); _z = value; }
+		}
+		public bool HasZ {
+			get { return base.has_field.has_field (2); }
+		}
+
+		public Rotation () : base(max_field_count) {}
+
+		public Rotation (byte[] buffer) : base(max_field_count, buffer) {
+			this.decode ();
+		}
+
+		protected override void decode () {
+			int tag = -1;
+			while (-1 != (tag = base.deserialize.read_tag ())) {
+				switch (tag) {
+				case 0:
+					this.x = base.deserialize.read_string ();
+					break;
+				case 1:
+					this.y = base.deserialize.read_string ();
+					break;
+				case 2:
+					this.z = base.deserialize.read_string ();
+					break;
+				default:
+					base.deserialize.read_unknow_data ();
+					break;
+				}
+			}
+		}
+
+		public override int encode (SprotoStream stream) {
+			base.serialize.open (stream);
+
+			if (base.has_field.has_field (0)) {
+				base.serialize.write_string (this.x, 0);
+			}
+
+			if (base.has_field.has_field (1)) {
+				base.serialize.write_string (this.y, 1);
+			}
+
+			if (base.has_field.has_field (2)) {
+				base.serialize.write_string (this.z, 2);
+			}
+
+			return base.serialize.close ();
+		}
+	}
+
+
+	public class Transform : SprotoTypeBase {
+		private static int max_field_count = 2;
+		
+		
+		private List<Position> _position; // tag 0
+		public List<Position> position {
+			get { return _position; }
+			set { base.has_field.set_field (0, true); _position = value; }
+		}
+		public bool HasPosition {
+			get { return base.has_field.has_field (0); }
+		}
+
+		private List<Rotation> _rotation; // tag 1
+		public List<Rotation> rotation {
+			get { return _rotation; }
+			set { base.has_field.set_field (1, true); _rotation = value; }
+		}
+		public bool HasRotation {
+			get { return base.has_field.has_field (1); }
+		}
+
+		public Transform () : base(max_field_count) {}
+
+		public Transform (byte[] buffer) : base(max_field_count, buffer) {
+			this.decode ();
+		}
+
+		protected override void decode () {
+			int tag = -1;
+			while (-1 != (tag = base.deserialize.read_tag ())) {
+				switch (tag) {
+				case 0:
+					this.position = base.deserialize.read_obj_list<Position> ();
+					break;
+				case 1:
+					this.rotation = base.deserialize.read_obj_list<Rotation> ();
+					break;
+				default:
+					base.deserialize.read_unknow_data ();
+					break;
+				}
+			}
+		}
+
+		public override int encode (SprotoStream stream) {
+			base.serialize.open (stream);
+
+			if (base.has_field.has_field (0)) {
+				base.serialize.write_obj (this.position, 0);
+			}
+
+			if (base.has_field.has_field (1)) {
+				base.serialize.write_obj (this.rotation, 1);
+			}
+
+			return base.serialize.close ();
+		}
+	}
+
+
 	public class battle {
 	
 		public class request : SprotoTypeBase {
-			private static int max_field_count = 3;
+			private static int max_field_count = 2;
 			
 			
-			private double _positionX; // tag 0
-			public double positionX {
-				get { return _positionX; }
-				set { base.has_field.set_field (0, true); _positionX = value; }
+			private List<Transform> _tranform; // tag 0
+			public List<Transform> tranform {
+				get { return _tranform; }
+				set { base.has_field.set_field (0, true); _tranform = value; }
 			}
-			public bool HasPositionX {
+			public bool HasTranform {
 				get { return base.has_field.has_field (0); }
 			}
 
-			private double _positionY; // tag 1
-			public double positionY {
-				get { return _positionY; }
-				set { base.has_field.set_field (1, true); _positionY = value; }
+			private List<RolerState> _rolerState; // tag 1
+			public List<RolerState> rolerState {
+				get { return _rolerState; }
+				set { base.has_field.set_field (1, true); _rolerState = value; }
 			}
-			public bool HasPositionY {
+			public bool HasRolerState {
 				get { return base.has_field.has_field (1); }
-			}
-
-			private double _positionZ; // tag 2
-			public double positionZ {
-				get { return _positionZ; }
-				set { base.has_field.set_field (2, true); _positionZ = value; }
-			}
-			public bool HasPositionZ {
-				get { return base.has_field.has_field (2); }
 			}
 
 			public request () : base(max_field_count) {}
@@ -50,13 +429,10 @@ namespace SprotoType {
 				while (-1 != (tag = base.deserialize.read_tag ())) {
 					switch (tag) {
 					case 0:
-						this.positionX = base.deserialize.read_double ();
+						this.tranform = base.deserialize.read_obj_list<Transform> ();
 						break;
 					case 1:
-						this.positionY = base.deserialize.read_double ();
-						break;
-					case 2:
-						this.positionZ = base.deserialize.read_double ();
+						this.rolerState = base.deserialize.read_obj_list<RolerState> ();
 						break;
 					default:
 						base.deserialize.read_unknow_data ();
@@ -69,15 +445,11 @@ namespace SprotoType {
 				base.serialize.open (stream);
 
 				if (base.has_field.has_field (0)) {
-					base.serialize.write_double (this.positionX, 0);
+					base.serialize.write_obj (this.tranform, 0);
 				}
 
 				if (base.has_field.has_field (1)) {
-					base.serialize.write_double (this.positionY, 1);
-				}
-
-				if (base.has_field.has_field (2)) {
-					base.serialize.write_double (this.positionZ, 2);
+					base.serialize.write_obj (this.rolerState, 1);
 				}
 
 				return base.serialize.close ();
@@ -101,6 +473,56 @@ namespace SprotoType {
 			public response () : base(max_field_count) {}
 
 			public response (byte[] buffer) : base(max_field_count, buffer) {
+				this.decode ();
+			}
+
+			protected override void decode () {
+				int tag = -1;
+				while (-1 != (tag = base.deserialize.read_tag ())) {
+					switch (tag) {
+					case 0:
+						this.code = base.deserialize.read_integer ();
+						break;
+					default:
+						base.deserialize.read_unknow_data ();
+						break;
+					}
+				}
+			}
+
+			public override int encode (SprotoStream stream) {
+				base.serialize.open (stream);
+
+				if (base.has_field.has_field (0)) {
+					base.serialize.write_integer (this.code, 0);
+				}
+
+				return base.serialize.close ();
+			}
+		}
+
+
+	}
+
+
+	public class beginGame {
+	
+		public class request : SprotoTypeBase {
+			private static int max_field_count = 1;
+			
+			
+			private Int64 _code; // tag 0
+			public Int64 code {
+				get { return _code; }
+				set { base.has_field.set_field (0, true); _code = value; }
+			}
+			public bool HasCode {
+				get { return base.has_field.has_field (0); }
+			}
+
+			public request () : base(max_field_count) {}
+
+			public request (byte[] buffer) : base(max_field_count, buffer) {
 				this.decode ();
 			}
 
@@ -331,6 +753,9 @@ public class Protocol : ProtocolBase {
 		Protocol.SetRequest<SprotoType.battle.request> (battle.Tag);
 		Protocol.SetResponse<SprotoType.battle.response> (battle.Tag);
 
+		Protocol.SetProtocol<beginGame> (beginGame.Tag);
+		Protocol.SetRequest<SprotoType.beginGame.request> (beginGame.Tag);
+
 		Protocol.SetProtocol<heartbeat> (heartbeat.Tag);
 
 		Protocol.SetProtocol<join> (join.Tag);
@@ -341,6 +766,10 @@ public class Protocol : ProtocolBase {
 
 	public class battle {
 		public const int Tag = 2;
+	}
+
+	public class beginGame {
+		public const int Tag = 102;
 	}
 
 	public class heartbeat {

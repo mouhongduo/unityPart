@@ -3,7 +3,42 @@
     session 1 : integer
   }
   
+
+.Position {
+	x 0 : string
+	y 1 : string
+	z 2 : string
+}
+
+.Rotation {
+	x 0 : string
+	y 1 : string
+	z 2 : string
+}
+
+.Transform {
+	position 0 : *Position
+	rotation 1 : *Rotation
+}
+
+.RolerState {
+	Walk 0 : boolean
+	WalkBack 1 : boolean
+	RunLeft 2 : boolean
+	RunRight 3 : boolean
+	RollForward 4 : boolean
+	LeftAttack 5 : integer
+	RightAttack 6 : integer
+	RollLeft 7 : boolean
+	RollRight 8 : boolean
+} 
   heartbeat 101 {}
+
+  beginGame 102{
+    request {
+      code 0 : integer
+    }
+  }
 
   join 1 {
     request {
@@ -18,9 +53,8 @@
 
   battle 2 {
     request {
-      positionX 0 : double
-      positionY 1 : double
-      positionZ 2 : double
+      tranform 0 : *Transform
+	    rolerState 1 : *RolerState
     }
     response {
       code 0 : integer

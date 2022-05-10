@@ -43,6 +43,12 @@ namespace Base{
                         Debug.Log("收到服务端的heartbeat消息");
                         return null;
                     });
+                    NetReceiver.AddHandler<Protocol.beginGame>((data) =>
+                    {
+                        Debug.Log("开始游戏");
+                        Main.cSharpCallLua.OnGameBegin();
+                        return null;
+                    });
                 }
             });
         }
@@ -73,9 +79,9 @@ namespace Base{
         }
         private static void SetBattleData(SprotoType.battle.request req, Vector3 data)
         {
-            req.positionX = data.x;
-            req.positionY = data.y;
-            req.positionZ = data.z;
+            //req.positionX = data.x;
+            //req.positionY = data.y;
+            //req.positionZ = data.z;
         }
 
         void IManager.Update()
